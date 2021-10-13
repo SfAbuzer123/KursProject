@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin view</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="body-color">
+    <div class="container-sm back-color">
+        <div class="d-flex bd-highlight">
+            <div class="p-2 w-100 bd-highlight">
+                <figure class="text-center">
+                    <h1>Страница администратора</h1>
+                </figure>
+            </div>
+            <div class="p-2 flex-shrink-1 bd-highlight">
+                <div class="p-2 bd-highlight">
+                    <a class="btn btn-primary" href="/" role="button">Выйти из аккаунта</a>
+                </div>
+            </div>
+        </div>
+        <table class="table" style="background-color: #B0E0E6">
+            <thead>
+            <tr>
+                <th scope="col">Почта пользователя</th>
+                <th scope="col">Ссылка на профиль</th>
+                <th scope="col">Имя пользователя</th>
+            </tr>
+            </thead>
+            <tbody th:each="user: ${users}">
+            <tr>
+                <td th:text="${user.getEmail()}"></td>
+                <td><a th:href="@{'/userAdminProfile/' + ${user.getId()}}">-->Перейти в профиль<--</a></td>
+                <td th:text="${user.getName()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="body-color">
+    <div class="container-sm back-color">
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <a class="btn btn-primary" th:href="@{'/personalAccount/'}">Мой профиль</a>
+                <a class="btn btn-primary" href="/" role="button">Выйти из аккаунта</a>
+            </div>
+        </div>
+        <div class="row g-0 bg-light position-relative" th:each="task: ${allTasks}">
+            <span class="border border-5 card-color">
+                <div class="col-md-6 mb-md-0 p-md-4 ">
+                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img th:src="${task.getImg1()}" class="img-thumbnail d-block w-100" alt="error">
+                            </div>
+                            <div class="carousel-item">
+                                <img th:src="${task.getImg2()}" class="img-thumbnail d-block w-100" th:alt="error">
+                            </div>
+                            <div class="carousel-item" >
+                                <img th:src="${task.getImg3()}" class="img-thumbnail d-block w-100" th:alt="error">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 p-4 ps-md-0 card-color">
+                    <form method="get" th:object="${answer}" th:action="@{/checkAnswer/}">
+                        <input type="text" th:value="${task.getId()}" id="taskId" name="taskId" class="invisibility">
+                        <h5 class="mt-0" th:text="${task.getTitle()}"></h5>
+                        <p th:text="${task.getTaskCondition()}"></p>
+                        <div th:switch="${task.getDecide()}">
+                            <div class="mb-3" th:case="1">
+                                <label for="exampleInputEmail1" class="form-label">Ответ</label>
+                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" th:field = "*{answer}">
+                                <div id="emailHelp" class="form-text">Вводите ответ через запятую и без пробелов с маленькой буквы</div>
+                                <button type="submit" class="btn btn-primary">Проверить</button>
+                            </div>
+                            <div th:case="2"></div>
+                            <div th:case="3"></div>
+                        </div>
+                        <h6 class="card-subtitle mb-2 text-muted" th:text="${'#' + task.getTag1() + ' ' + '#' + task.getTag2() + ' ' + '#' + task.getTag3()}"></h6>
+                        <div th:switch="${task.getDecide()}">
+                            <div class="alert alert-primary" role="alert" th:case="2">Решено правильно</div>
+                            <div class="alert alert-danger" role="alert" th:case="3">Решено неправильно</div>
+                        </div>
+                    </form>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+</body>
+</html>
