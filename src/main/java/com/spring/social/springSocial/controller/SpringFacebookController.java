@@ -63,12 +63,12 @@ public class SpringFacebookController {
         currentUserId = userInfoService.findByEmail(userInfo.getEmail()).get(0).getId();
         if(user.getEmail().equals("chednik2002@yandex.ru"))
             return "redirect:/admin";
-        List<Task> allTasks = taskService.setCurrentAnswers(currentUserId);
-        allTasks = taskService.sortByDate(allTasks);
+        List<Task> allTasks = taskService.setCurrentAnswers(currentUserId, taskService.readAll());
         model.addAttribute("allTasks", allTasks);
         model.addAttribute("user", userInfo);
         model.addAttribute("accessToken", accessToken);
         model.addAttribute("answer", new Answer());
+        model.addAttribute("tags", taskService.getTags());
         return "view/userprofile";
     }
 
@@ -76,7 +76,6 @@ public class SpringFacebookController {
     public String personalAccount(Model model) {
         currentUserId = userInfoService.findByEmail(userInfo.getEmail()).get(0).getId();
         myTasks = taskService.getMyTasks(currentUserId);
-        myTasks = taskService.sortByDate(myTasks);
         model.addAttribute("myTasks", myTasks);
         model.addAttribute("user", userInfo);
         model.addAttribute("accessToken", currentAccessToken);
@@ -123,4 +122,15 @@ public class SpringFacebookController {
         return "redirect:/personalAccount/";
     }
 
+    @RequestMapping("/searchBy/{tag}")
+    public String searchByTag(@PathVariable String tag, Model model){
+        List<Task> tasks = taskService.getTasksByTag(tag);
+        tasks = taskService.setCurrentAnswers(currentUserId, tasks);
+        model.addAttribute("allTasks", tasks);
+        model.addAttribute("user", userInfo);
+        model.addAttribute("accessToken", currentAccessToken);
+        model.addAttribute("answer", new Answer());
+        model.addAttribute("tags", taskService.getTags());
+        return "view/userprofile";
+    }
 }

@@ -9,18 +9,21 @@ create table if not exists tasks(
     id INTEGER PRIMARY KEY,
     user_id INTEGER references users(id),
     title varchar(50) not null,
-    task_condition varchar(250) not null ,
+    task_condition varchar(400) not null ,
     topic varchar(50) not null ,
     tag1 varchar(50) not null ,
     tag2 varchar(50) not null ,
     tag3 varchar(50) not null ,
     img1 varchar(200) not null ,
-    img2 varchar(200),
-    img3 varchar(200),
+    img2 varchar(200) not null ,
+    img3 varchar(200) not null ,
     right_answer1 varchar(200) not null ,
     right_answer2 varchar(200),
     right_answer3 varchar(200),
-    decide int not null
+    decide int not null,
+    cloudinary_id1 varchar(200) not null,
+    cloudinary_id2 varchar(200) not null,
+    cloudinary_id3 varchar(200) not null
 );
 -- CREATE SEQUENCE hibernate_sequence_tasks START WITH 1 INCREMENT BY 1;
 create table if not exists topics(

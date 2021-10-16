@@ -8,56 +8,58 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
-lol
-<!--<div class="body-color">-->
-<!--    <div class="container-sm back-color">-->
-<!--        <div class="row" style="height: 55px">-->
-<!--            <div class="position-relative">-->
-<!--                <div class="position-absolute top-0 end-0">-->
-<!--                    <ul class="social-network social-circle">-->
-<!--                        <li><a th:href="@{'/facebookLogin'}" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>-->
-<!--                        <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+<div class="body-color">
+    <div class="container-sm back-color">
+        <div class="row">
+            <div class="col-auto me-auto">
+                <a th:href="@{/}">
+                    <img src="https://mywebicons.ru/i/png/19f7cc467fef3a88afe5f88b198f26f4.png" style="height: 50px;">
+                </a>
+            </div>
+            <div class="col-auto">
+                <div class="text-center social-btn">
+                    <a th:href="@{'/facebookLogin'}" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Sign in with <b>Facebook</b></a>
+                </div>
+            </div>
+        </div>
 <!--        <div class="input-group mb-3">-->
 <!--            <form th:action="@{'/search/'+ ${searchObject.getText()}}">-->
 <!--                <input type="text" class="form-control" placeholder="Поиск" aria-label="Recipient's username" aria-describedby="button-addon2" name="text">-->
 <!--                <input type="submit" value="Поиск">-->
 <!--            </form>-->
-
 <!--        </div>-->
-<!--        <div class="row g-0 bg-light position-relative" th:each="task: ${allTasks}">-->
-<!--            <span class="border border-5 card-color">-->
-<!--                <div class="col-md-6 mb-md-0 p-md-4 ">-->
-<!--                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">-->
-<!--                        <div class="carousel-inner">-->
-<!--                            <div class="carousel-item active">-->
-<!--                                <img th:src="${task.getImg1()}" class="img-thumbnail d-block w-100" alt="error">-->
-<!--                            </div>-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img th:src="${task.getImg2()}" class="img-thumbnail d-block w-100" th:alt="error">-->
-<!--                            </div>-->
-<!--                            <div class="carousel-item" >-->
-<!--                                <img th:src="${task.getImg3()}" class="img-thumbnail d-block w-100" th:alt="error">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-md-6 p-4 ps-md-0 card-color">-->
-<!--                    <input type="text" th:value="${task.getId()}" id="taskId" name="taskId" class="invisibility">-->
-<!--                    <h5 class="mt-0" th:text="${task.getTitle()}"></h5>-->
-<!--                    <p th:text="${task.getTaskCondition()}"></p>-->
-<!--                    <h6 class="card-subtitle mb-2 text-muted" th:text="${'#' + task.getTag1() + ' ' + '#' + task.getTag2() + ' ' + '#' + task.getTag3()}"></h6>-->
-<!--                </div>-->
-<!--            </span>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>-->
+        <div class="btn-group" th:each="tag: ${tags}">
+            <a th:href="@{${tag}}" class="btn btn-primary active" th:text="${'#' + tag}" style="margin-bottom: 20px"></a>
+        </div>
+        <div class="row g-0 bg-light position-relative" th:each="task: ${tasks}">
+            <span class="border border-5 card-color">
+                <div class="col-md-6 mb-md-0 p-md-4 ">
+                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img th:src="${task.getImg1()}" class="img-thumbnail d-block w-100" alt="error">
+                            </div>
+                            <div class="carousel-item">
+                                <img th:src="${task.getImg2()}" class="img-thumbnail d-block w-100" th:alt="error">
+                            </div>
+                            <div class="carousel-item" >
+                                <img th:src="${task.getImg3()}" class="img-thumbnail d-block w-100" th:alt="error">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 p-4 ps-md-0 card-color">
+                    <input type="text" th:value="${task.getId()}" id="taskId" name="taskId" class="invisibility">
+                    <h5 class="mt-0" th:text="${task.getTitle()}"></h5>
+                    <p th:remove="tag" th:utext="${task.getTaskCondition()}"></p>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="${'#' + task.getTag1() + ' ' + '#' + task.getTag2() + ' ' + '#' + task.getTag3()}"></h6>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,20 +1,22 @@
 package com.spring.social.springSocial.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.github.rjeschke.txtmark.Processor;
+import com.spring.social.springSocial.cloudinary.MyCloudinary;
 import com.spring.social.springSocial.model.Answer;
 import com.spring.social.springSocial.model.Task;
 import com.spring.social.springSocial.model.UserAnswer;
 import com.spring.social.springSocial.repository.TaskRepository;
 import com.spring.social.springSocial.search.TaskSearch;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service
@@ -25,10 +27,23 @@ public class TaskServiceImpl implements TaskService{
     @Autowired
     private UserAnswerService answerService;
 
+    private Cloudinary cloudinary = MyCloudinary.cloudinary;
+
+    @SneakyThrows
     @Override
     public void create(Task task, int userId) {
+        Map uploadResult1 = cloudinary.uploader().upload(task.getImg1(), ObjectUtils.emptyMap());
+        task.setImg1((String) uploadResult1.get("url"));
+        task.setCloudinaryId1((String) uploadResult1.get("public_id"));
+        Map uploadResult2 = cloudinary.uploader().upload(task.getImg2(), ObjectUtils.emptyMap());
+        task.setImg2((String) uploadResult2.get("url"));
+        task.setCloudinaryId2((String) uploadResult2.get("public_id"));
+        Map uploadResult3 = cloudinary.uploader().upload(task.getImg3(), ObjectUtils.emptyMap());
+        task.setImg3((String) uploadResult3.get("url"));
+        task.setCloudinaryId3((String) uploadResult3.get("public_id"));
         task.setUserId(userId);
         task.setDecide(1);
+        task.setTaskCondition(Processor.process(task.getTaskCondition()));
         taskRepository.save(task);
     }
 
@@ -42,11 +57,38 @@ public class TaskServiceImpl implements TaskService{
         return taskRepository.getById(id);
     }
 
+    @SneakyThrows
     @Override
     public boolean update(Task task, int id) {
         if (taskRepository.existsById(id)) {
+            Task oldTask = read(id);
+            if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
+                cloudinary.uploader().destroy(oldTask.getCloudinaryId1(), ObjectUtils.emptyMap());
+                Map uploadResult1 = cloudinary.uploader().upload(task.getImg1(), ObjectUtils.emptyMap());
+                task.setImg1((String) uploadResult1.get("url"));
+                task.setCloudinaryId1((String) uploadResult1.get("public_id"));
+            }
+            else
+                task.setCloudinaryId1(oldTask.getCloudinaryId1());
+            if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
+                cloudinary.uploader().destroy(oldTask.getCloudinaryId2(), ObjectUtils.emptyMap());
+                Map uploadResult2 = cloudinary.uploader().upload(task.getImg2(), ObjectUtils.emptyMap());
+                task.setImg2((String) uploadResult2.get("url"));
+                task.setCloudinaryId2((String) uploadResult2.get("public_id"));
+            }
+            else
+                task.setCloudinaryId2(oldTask.getCloudinaryId2());
+            if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
+                cloudinary.uploader().destroy(oldTask.getCloudinaryId3(), ObjectUtils.emptyMap());
+                Map uploadResult3 = cloudinary.uploader().upload(task.getImg3(), ObjectUtils.emptyMap());
+                task.setImg3((String) uploadResult3.get("url"));
+                task.setCloudinaryId3((String) uploadResult3.get("public_id"));
+            }
+            else
+                task.setCloudinaryId3(oldTask.getCloudinaryId3());
             task.setId(id);
             task.setDecide(task.getDecide());
+            task.setTaskCondition(Processor.process(task.getTaskCondition()));
             taskRepository.save(task);
             return true;
         }
@@ -68,7 +110,7 @@ public class TaskServiceImpl implements TaskService{
         for (Task task: taskRepository.findAll())
             if (task.getUserId() == id)
                 myTasks.add(task);
-        return myTasks;
+        return sortByDate(myTasks);
     }
 
     @Override
@@ -90,8 +132,8 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public List<Task> setCurrentAnswers(int currentUserId) {
-        for (Task task : readAll())
+    public List<Task> setCurrentAnswers(int currentUserId, List<Task> tasks) {
+        for (Task task : tasks)
             for (UserAnswer userAnswer : answerService.readAll()
             ) {
                 if (userAnswer.getUserId() == currentUserId && task.getId() == userAnswer.getTaskId()) {
@@ -103,7 +145,7 @@ public class TaskServiceImpl implements TaskService{
                     task.setDecide(1);
                 }
             }
-        return readAll();
+        return sortByDate(tasks);
     }
 
     @Override
@@ -122,5 +164,28 @@ public class TaskServiceImpl implements TaskService{
     public List<Task> sortByDate(List<Task> tasks) {
         tasks.sort((Task o1, Task o2) -> o2.getId() - o1.getId());
         return tasks;
+    }
+
+    @Override
+    public List<String> getTags() {
+        List<String> tags = new ArrayList<>();
+        for (Task task: readAll()) {
+            if (!tags.contains(task.getTag1()))
+                tags.add(task.getTag1());
+            if (!tags.contains(task.getTag2()))
+                tags.add(task.getTag2());
+            if (!tags.contains(task.getTag3()))
+                tags.add(task.getTag3());
+        }
+        return tags;
+    }
+
+    @Override
+    public List<Task> getTasksByTag(String tag) {
+        List<Task> result = new ArrayList<>();
+        for (Task task: readAll())
+            if (task.getTag1().equals(tag) || task.getTag2().equals(tag) || task.getTag3().equals(tag))
+                result.add(task);
+        return sortByDate(result);
     }
 }

@@ -22,11 +22,15 @@ public interface TaskService {
 
     int incorrectAnswers();
 
-    List<Task> setCurrentAnswers(int currentUserId);
+    List<Task> setCurrentAnswers(int currentUserId, List<Task> tasks);
 
     List<Task> search(String text);
 
     boolean checkAnswer(Answer answer);
 
     List<Task> sortByDate(List<Task> tasks);
+
+    List<String> getTags();
+
+    List<Task> getTasksByTag(String tag);
 }

@@ -12,78 +12,55 @@
 .invisibility{
     visibility: hidden;
 }
-ul.social-network {
-    list-style: none;
-    display: inline;
-    margin-left:0 !important;
-    padding: 0;
+.login-form {
+    width: 340px;
+    margin: 30px auto;
 }
-ul.social-network li {
-    display: inline;
-    margin: 0 5px;
+.login-form form {
+    margin-bottom: 15px;
+    background: #f7f7f7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    padding: 30px;
 }
-
-.social-network a.icoRss:hover {
-    background-color: #F56505;
+.login-form h2 {
+    margin: 0 0 15px;
 }
-.social-network a.icoFacebook:hover {
-    background-color:#3B5998;
-}
-.social-network a.icoTwitter:hover {
-    background-color:#33ccff;
-}
-.social-network a.icoGoogle:hover {
-    background-color:#BD3518;
-}
-.social-network a.icoVimeo:hover {
-    background-color:#0590B8;
-}
-.social-network a.icoLinkedin:hover {
-    background-color:#007bb7;
-}
-.social-network a.icoRss:hover i, .social-network a.icoFacebook:hover i, .social-network a.icoTwitter:hover i,
-.social-network a.icoGoogle:hover i, .social-network a.icoVimeo:hover i, .social-network a.icoLinkedin:hover i {
-    color:#fff;
-}
-a.socialIcon:hover, .socialHoverClass {
-    color:#44BCDD;
-}
-
-.social-circle li a {
-    display:inline-block;
-    position:relative;
-    margin:0 auto 0 auto;
-    -moz-border-radius:50%;
-    -webkit-border-radius:50%;
-    border-radius:50%;
-    text-align:center;
-    width: 50px;
-    height: 50px;
-    font-size:20px;
-    background-color: #D3D3D3;
-}
-.social-circle li i {
-    margin:0;
-    line-height:50px;
+.login-form .hint-text {
+    color: #777;
+    padding-bottom: 15px;
     text-align: center;
 }
-
-.social-circle li a:hover i, .triggeredHover {
-    -moz-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -ms--transform: rotate(360deg);
-    transform: rotate(360deg);
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    -o-transition: all 0.2s;
-    -ms-transition: all 0.2s;
-    transition: all 0.2s;
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
 }
-.social-circle i {
-    color: #fff;
-    -webkit-transition: all 0.8s;
-    -moz-transition: all 0.8s;
-    -o-transition: all 0.8s;
-    -ms-transition: all 0.8s;
-    transition: all 0.8s;
+.login-btn {
+    font-size: 15px;
+    font-weight: bold;
+}
+.or-seperator {
+    margin: 20px 0 10px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+}
+.or-seperator i {
+    padding: 0 10px;
+    background: #f7f7f7;
+    position: relative;
+    top: -11px;
+    z-index: 1;
+}
+.social-btn .btn {
+    margin: 10px 0;
+    font-size: 15px;
+    text-align: left;
+    line-height: 24px;
+}
+.social-btn .btn i {
+    float: left;
+    margin: 4px 15px  0 5px;
+    min-width: 15px;
+}
+.input-group-addon .fa{
+    font-size: 18px;
 }

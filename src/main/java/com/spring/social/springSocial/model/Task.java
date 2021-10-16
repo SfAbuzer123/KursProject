@@ -5,8 +5,6 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Indexed
@@ -66,4 +64,12 @@ public class Task {
     @Column(name = "decide")
     private int decide;
 
+    @Column(name = "cloudinary_id1")
+    private String cloudinaryId1;
+
+    @Column(name = "cloudinary_id2")
+    private String cloudinaryId2;
+
+    @Column(name = "cloudinary_id3")
+    private String cloudinaryId3;
 }

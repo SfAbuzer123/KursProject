@@ -13,17 +13,19 @@
 <body>
 <div class="body-color">
     <div class="container-sm back-color">
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <div class="p-2 bd-highlight">
-                <a class="btn btn-primary" href="/" role="button">Выйти из аккаунта</a>
-            </div>
-            <div class="p-2 bd-highlight">
-                <a class="btn btn-primary" th:href="@{'/facebookLogin'}" role="button">На страницу администратора</a>
-            </div>
+        <div class="d-flex bd-highlight">
+            <a th:href="@{/}">
+                <img src="https://mywebicons.ru/i/png/19f7cc467fef3a88afe5f88b198f26f4.png" style="height: 50px; width: 50px;">
+            </a>
             <div class="p-2 w-100 bd-highlight">
                 <figure class="text-center">
                     <h1 th:text="${'Страница пользователя ' + user.getEmail()}"></h1>
                 </figure>
+            </div>
+            <div class="p-2 flex-shrink-1 bd-highlight">
+                <div class="p-2 bd-highlight">
+                    <a class="btn btn-primary" th:href="@{'/facebookLogin'}" role="button">На страницу администратора</a>
+                </div>
             </div>
         </div>
         <div class="accordion" id="accordionPanelsStayOpenExample">

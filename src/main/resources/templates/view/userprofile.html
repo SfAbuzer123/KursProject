@@ -11,11 +11,23 @@
 <body>
 <div class="body-color">
     <div class="container-sm back-color">
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <div class="p-2 bd-highlight">
-                <a class="btn btn-primary" th:href="@{'/personalAccount/'}">Мой профиль</a>
-                <a class="btn btn-primary" href="/" role="button">Выйти из аккаунта</a>
+        <div class="d-flex bd-highlight">
+            <a th:href="@{/}">
+                <img src="https://mywebicons.ru/i/png/19f7cc467fef3a88afe5f88b198f26f4.png" style="height: 50px; width: 50px;">
+            </a>
+            <div class="p-2 w-100 bd-highlight">
+                <figure class="text-center">
+                    <h2 th:text="${'Приветствуем тебя, ' + user.getName() + '!'}"></h2>
+                </figure>
             </div>
+            <div class="p-2 flex-shrink-1 bd-highlight">
+                <div class="p-2 bd-highlight">
+                    <a class="btn btn-primary" th:href="@{'/personalAccount/'}">Мой профиль</a>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group" th:each="tag: ${tags}">
+            <a th:href="@{'/searchBy/' + ${tag}}" class="btn btn-primary active" th:text="${'#' + tag}" style="margin-bottom: 20px"></a>
         </div>
         <div class="row g-0 bg-light position-relative" th:each="task: ${allTasks}">
             <span class="border border-5 card-color">
@@ -38,7 +50,7 @@
                     <form method="get" th:object="${answer}" th:action="@{/checkAnswer/}">
                         <input type="text" th:value="${task.getId()}" id="taskId" name="taskId" class="invisibility">
                         <h5 class="mt-0" th:text="${task.getTitle()}"></h5>
-                        <p th:text="${task.getTaskCondition()}"></p>
+                        <p th:remove="tag" th:utext="${task.getTaskCondition()}"></p>
                         <div th:switch="${task.getDecide()}">
                             <div class="mb-3" th:case="1">
                                 <label for="exampleInputEmail1" class="form-label">Ответ</label>
