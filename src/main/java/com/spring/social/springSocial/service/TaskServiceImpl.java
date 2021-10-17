@@ -87,7 +87,7 @@ public class TaskServiceImpl implements TaskService{
             else
                 task.setCloudinaryId3(oldTask.getCloudinaryId3());
             task.setId(id);
-            task.setDecide(task.getDecide());
+            task.setDecide(oldTask.getDecide());
             task.setTaskCondition(Processor.process(task.getTaskCondition()));
             taskRepository.save(task);
             return true;
@@ -95,9 +95,14 @@ public class TaskServiceImpl implements TaskService{
         return false;
     }
 
+    @SneakyThrows
     @Override
     public boolean delete(int id) {
         if (taskRepository.existsById(id)) {
+            Task task = read(id);
+            cloudinary.uploader().destroy(task.getCloudinaryId1(), ObjectUtils.emptyMap());
+            cloudinary.uploader().destroy(task.getCloudinaryId2(), ObjectUtils.emptyMap());
+            cloudinary.uploader().destroy(task.getCloudinaryId3(), ObjectUtils.emptyMap());
             taskRepository.deleteById(id);
             return true;
         }
