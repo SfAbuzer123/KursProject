@@ -1,8 +1,6 @@
 package com.spring.social.springSocial.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 

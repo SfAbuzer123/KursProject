@@ -66,8 +66,8 @@ public class SpringFacebookController {
         if(user.getEmail().equals("chednik2002@yandex.ru"))
             return "redirect:/admin";
         List<Task> allTasks = taskService.setCurrentAnswers(currentUserId, taskService.readAll());
-        taskService.setCurrentEstimations(currentUserId, taskService.readAll());
-        taskService.setAVGEstimations();
+        taskService.setCurrentEstimations(currentUserId, allTasks);
+        taskService.setAVGEstimations(allTasks);
         model.addAttribute("allTasks", allTasks);
         model.addAttribute("user", userInfo);
         model.addAttribute("accessToken", accessToken);

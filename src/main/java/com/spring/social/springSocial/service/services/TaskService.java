@@ -39,5 +39,5 @@ public interface TaskService {
 
     List<Task> setCurrentEstimations(int currentUserId, List<Task> tasks);
 
-    List<Task> setAVGEstimations();
+    List<Task> setAVGEstimations(List<Task> tasks);
 }

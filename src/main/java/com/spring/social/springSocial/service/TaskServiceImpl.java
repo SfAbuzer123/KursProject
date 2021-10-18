@@ -242,8 +242,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> setAVGEstimations() {
-        List<Task> tasks = readAll();
+    public List<Task> setAVGEstimations(List<Task> tasks) {
         for (Task task: tasks) {
             task.setEstimationAVG(estimationService.getEstimationAVGForTask(task.getId()));
             update(task, task.getId());
