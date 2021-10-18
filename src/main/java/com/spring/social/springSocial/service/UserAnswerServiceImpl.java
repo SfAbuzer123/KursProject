@@ -2,13 +2,14 @@ package com.spring.social.springSocial.service;
 
 import com.spring.social.springSocial.model.UserAnswer;
 import com.spring.social.springSocial.repository.UserAnswerRepository;
+import com.spring.social.springSocial.service.services.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserAnswerServiceImpl implements UserAnswerService{
+public class UserAnswerServiceImpl implements UserAnswerService {
     @Autowired
     private UserAnswerRepository answerRepository;
 

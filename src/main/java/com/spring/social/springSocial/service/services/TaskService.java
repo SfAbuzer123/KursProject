@@ -1,12 +1,15 @@
-package com.spring.social.springSocial.service;
+package com.spring.social.springSocial.service.services;
 
 import com.spring.social.springSocial.model.Answer;
+import com.spring.social.springSocial.model.DTO.TaskDTO;
 import com.spring.social.springSocial.model.Task;
 
 import java.util.List;
 
 public interface TaskService {
     void create(Task task, int userId);
+
+    List<TaskDTO> readAllDTO();
 
     List<Task> readAll();
 
@@ -33,4 +36,8 @@ public interface TaskService {
     List<String> getTags();
 
     List<Task> getTasksByTag(String tag);
+
+    List<Task> setCurrentEstimations(int currentUserId, List<Task> tasks);
+
+    List<Task> setAVGEstimations();
 }

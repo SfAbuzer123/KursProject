@@ -2,19 +2,21 @@ package com.spring.social.springSocial.service;
 
 import com.spring.social.springSocial.model.UserInfo;
 import com.spring.social.springSocial.repository.UserRepository;
+import com.spring.social.springSocial.service.services.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserInfoServiceImpl implements UserInfoService{
+public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public void create(UserInfo userInfo) {
-        userRepository.save(userInfo);
+        if (!readAll().contains(userInfo))
+            userRepository.save(userInfo);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.spring.social.springSocial.service;
 
 import com.spring.social.springSocial.model.Topic;
 import com.spring.social.springSocial.repository.TopicRepository;
+import com.spring.social.springSocial.service.services.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

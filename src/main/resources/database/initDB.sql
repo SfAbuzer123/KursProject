@@ -23,7 +23,9 @@ create table if not exists tasks(
     decide int not null,
     cloudinary_id1 varchar(200) not null,
     cloudinary_id2 varchar(200) not null,
-    cloudinary_id3 varchar(200) not null
+    cloudinary_id3 varchar(200) not null,
+    estimation_AVG int ,
+    user_estimation int
 );
 -- CREATE SEQUENCE hibernate_sequence_tasks START WITH 1 INCREMENT BY 1;
 create table if not exists topics(
@@ -37,6 +39,12 @@ create table if not exists users_answers(
     task_id integer,
     decided integer
 );
+create table if not exists estimations(
+    id integer primary key ,
+    user_id integer not null ,
+    task_id integer not null ,
+    estimation int not null
+);
 -- CREATE SEQUENCE hibernate_sequence_answers START WITH 1 INCREMENT BY 1;
 
 -- DROP SEQUENCE IF EXISTS hibernate_sequence;
@@ -45,6 +53,7 @@ create table if not exists users_answers(
 -- drop table if exists users_answers;
 -- drop table if exists tasks;
 -- drop table if exists users;
+-- drop table if exists estimations;
 
 
 

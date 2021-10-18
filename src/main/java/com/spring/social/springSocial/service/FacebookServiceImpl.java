@@ -1,5 +1,6 @@
 package com.spring.social.springSocial.service;
 
+import com.spring.social.springSocial.service.services.FacebookService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.User;
@@ -9,7 +10,7 @@ import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FacebookServiceImpl implements FacebookService{
+public class FacebookServiceImpl implements FacebookService {
     @Value("${spring.social.facebook.app-id}")
     private String facebookId;
     @Value("${spring.social.facebook.app-secret}")

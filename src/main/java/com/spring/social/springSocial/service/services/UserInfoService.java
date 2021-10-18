@@ -1,4 +1,4 @@
-package com.spring.social.springSocial.service;
+package com.spring.social.springSocial.service.services;
 
 import com.spring.social.springSocial.model.UserInfo;
 import org.springframework.data.repository.query.Param;

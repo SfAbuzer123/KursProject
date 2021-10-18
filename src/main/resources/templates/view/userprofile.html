@@ -49,6 +49,18 @@
                 <div class="col-md-6 p-4 ps-md-0 card-color">
                     <form method="get" th:object="${answer}" th:action="@{/checkAnswer/}">
                         <input type="text" th:value="${task.getId()}" id="taskId" name="taskId" class="invisibility">
+                        <div class="rating-result">
+                            <span class="active" th:if="${task.getEstimationAVG() > 0}"></span>
+                            <span th:if="${task.getEstimationAVG() < 1}"></span>
+                            <span class="active" th:if="${task.getEstimationAVG() > 1}"></span>
+                            <span th:if="${task.getEstimationAVG() < 2}"></span>
+                            <span class="active" th:if="${task.getEstimationAVG() > 2}"></span>
+                            <span th:if="${task.getEstimationAVG() < 3}"></span>
+                            <span class="active" th:if="${task.getEstimationAVG() > 3}"></span>
+                            <span th:if="${task.getEstimationAVG() < 4}"></span>
+                            <span class="active" th:if="${task.getEstimationAVG() > 4}"></span>
+                            <span th:if="${task.getEstimationAVG() < 5}"></span>
+                        </div>
                         <h5 class="mt-0" th:text="${task.getTitle()}"></h5>
                         <p th:remove="tag" th:utext="${task.getTaskCondition()}"></p>
                         <div th:switch="${task.getDecide()}">
@@ -66,6 +78,21 @@
                             <div class="alert alert-primary" role="alert" th:case="2">Решено правильно</div>
                             <div class="alert alert-danger" role="alert" th:case="3">Решено неправильно</div>
                         </div>
+                    </form>
+                    <form method = "post" th:action="@{'/rate/' + ${task.getId()}}" th:object="${estimation}" th:if="${task.getUserEstimation() == 0}">
+                        <div class="rating-area">
+                            <input type="radio" th:id="${task.getId() + '5'}" name="estimation" th:field="*{estimation}" value="5" >
+                            <label th:for="${task.getId() + '5'}" title="Оценка «5»"></label>
+                            <input type="radio" th:id="${task.getId()  + '4'}" name="estimation" th:field="*{estimation}" value="4" >
+                            <label th:for="${task.getId() + '4'}" title="Оценка «4»"></label>
+                            <input type="radio" th:id="${task.getId() + '3'}" name="estimation" th:field="*{estimation}" value="3" >
+                            <label th:for="${task.getId() + '3'}" title="Оценка «3»"></label>
+                            <input type="radio" th:id="${task.getId() + '2'}" name="estimation" th:field="*{estimation}" value="2" >
+                            <label th:for="${task.getId() + '2'}" title="Оценка «2»"></label>
+                            <input type="radio" th:id="${task.getId() + '1'}" name="estimation" th:field="*{estimation}" value="1" >
+                            <label th:for="${task.getId() + '1'}" title="Оценка «1»"></label>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Оценить</button>
                     </form>
                 </div>
             </span>

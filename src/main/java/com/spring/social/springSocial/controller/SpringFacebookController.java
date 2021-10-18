@@ -1,11 +1,13 @@
 package com.spring.social.springSocial.controller;
 
-import com.spring.social.springSocial.model.Answer;
-import com.spring.social.springSocial.model.Task;
-import com.spring.social.springSocial.model.UserAnswer;
-import com.spring.social.springSocial.model.UserInfo;
+import com.spring.social.springSocial.model.*;
 import com.spring.social.springSocial.parser.Parser;
 import com.spring.social.springSocial.service.*;
+import com.spring.social.springSocial.service.services.EstimationService;
+import com.spring.social.springSocial.service.services.FacebookService;
+import com.spring.social.springSocial.service.services.TopicService;
+import com.spring.social.springSocial.service.services.UserAnswerService;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Controller;
@@ -13,8 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -34,6 +34,9 @@ public class SpringFacebookController {
     @Autowired
     private UserAnswerService userAnswerService;
 
+    @Autowired
+    private EstimationService estimationService;
+
     private UserInfo userInfo;
     private String currentAccessToken;
     private int currentUserId;
@@ -48,7 +51,7 @@ public class SpringFacebookController {
     }
 
     @GetMapping(value = "/facebook")
-    public String facebook(@RequestParam(required = false, name = "code") String code) {
+    public String facebook(@RequestParam(name = "code") String code) {
         String accessToken = facebookService.getFacebookAccessToken(code);
         return "redirect:/facebookProfileData/" + accessToken;
     }
@@ -58,17 +61,19 @@ public class SpringFacebookController {
         currentAccessToken = accessToken;
         User user = facebookService.getFacebookUserProfile(currentAccessToken);
         userInfo = new UserInfo(user.getFirstName(), user.getEmail());
-        if (!userInfoService.readAll().contains(userInfo))
-            userInfoService.create(userInfo);
+        userInfoService.create(userInfo);
         currentUserId = userInfoService.findByEmail(userInfo.getEmail()).get(0).getId();
         if(user.getEmail().equals("chednik2002@yandex.ru"))
             return "redirect:/admin";
         List<Task> allTasks = taskService.setCurrentAnswers(currentUserId, taskService.readAll());
+        taskService.setCurrentEstimations(currentUserId, taskService.readAll());
+        taskService.setAVGEstimations();
         model.addAttribute("allTasks", allTasks);
         model.addAttribute("user", userInfo);
         model.addAttribute("accessToken", accessToken);
         model.addAttribute("answer", new Answer());
         model.addAttribute("tags", taskService.getTags());
+        model.addAttribute("estimation", new Estimation());
         return "view/userprofile";
     }
 
@@ -89,7 +94,12 @@ public class SpringFacebookController {
 
     @PostMapping("/createTask/")
     public String createTask(@ModelAttribute Task task) {
-        taskService.create(task, currentUserId);
+        try {
+            taskService.create(task, currentUserId);
+        }
+        catch (Exception e){
+            return "view/error";
+        }
         return "redirect:/personalAccount/";
     }
 
@@ -100,19 +110,24 @@ public class SpringFacebookController {
             Task task = taskService.read(answer.getTaskId());
             task.setDecide(2);
             taskService.update(task, answer.getTaskId());
-            return "redirect:/facebookLogin";
+            return "redirect:/facebookProfileData/" + currentAccessToken;
         }
         userAnswerService.create(new UserAnswer(currentUserId, answer.getTaskId(), 3));
         Task task = taskService.read(answer.getTaskId());
         task.setDecide(3);
         taskService.update(task, answer.getTaskId());
-        return "redirect:/facebookLogin";
+        return "redirect:/facebookProfileData/" + currentAccessToken;
     }
 
     @RequestMapping("/updateTask/{taskId}")
     public String updateTask(@ModelAttribute Task task, @PathVariable String taskId) {
-        task.setUserId(currentUserId);
-        taskService.update(task, Integer.parseInt(taskId));
+        try {
+            task.setUserId(currentUserId);
+            taskService.update(task, Integer.parseInt(taskId));
+        }
+        catch (Exception e){
+            return "view/error";
+        }
         return "redirect:/personalAccount/";
     }
 
@@ -131,6 +146,13 @@ public class SpringFacebookController {
         model.addAttribute("accessToken", currentAccessToken);
         model.addAttribute("answer", new Answer());
         model.addAttribute("tags", taskService.getTags());
+        model.addAttribute("estimation", new Estimation());
         return "view/userprofile";
+    }
+
+    @RequestMapping("/rate/{taskId}")
+    public String rate(@PathVariable String taskId, @ModelAttribute Estimation estimation){
+        estimationService.create(estimation, currentUserId, Integer.parseInt(taskId));
+        return "redirect:/facebookProfileData/" + currentAccessToken;
     }
 }

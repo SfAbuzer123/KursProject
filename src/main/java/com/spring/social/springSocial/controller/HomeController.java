@@ -2,7 +2,7 @@ package com.spring.social.springSocial.controller;
 
 import com.spring.social.springSocial.model.SearchObject;
 import com.spring.social.springSocial.model.Task;
-import com.spring.social.springSocial.service.TaskService;
+import com.spring.social.springSocial.service.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +20,8 @@ public class HomeController {
     @GetMapping(value = "/")
     public String home(Model model){
         List<Task> tasks = taskService.readAll();
-        tasks = taskService.sortByDate(tasks);
         model.addAttribute("searchObject", new SearchObject());
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskService.sortByDate(tasks));
         model.addAttribute("tags", taskService.getTags());
         return "view/home";
     }

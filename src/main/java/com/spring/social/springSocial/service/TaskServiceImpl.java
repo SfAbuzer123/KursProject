@@ -4,47 +4,67 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.github.rjeschke.txtmark.Processor;
 import com.spring.social.springSocial.cloudinary.MyCloudinary;
+import com.spring.social.springSocial.mapper.TaskMapper;
 import com.spring.social.springSocial.model.Answer;
+import com.spring.social.springSocial.model.DTO.TaskDTO;
+import com.spring.social.springSocial.model.Estimation;
 import com.spring.social.springSocial.model.Task;
 import com.spring.social.springSocial.model.UserAnswer;
 import com.spring.social.springSocial.repository.TaskRepository;
 import com.spring.social.springSocial.search.TaskSearch;
-import lombok.SneakyThrows;
+import com.spring.social.springSocial.service.services.EstimationService;
+import com.spring.social.springSocial.service.services.TaskService;
+import com.spring.social.springSocial.service.services.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Transactional
 @Service
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
     @Autowired
     private UserAnswerService answerService;
 
+    @Autowired
+    private EstimationService estimationService;
+
     private Cloudinary cloudinary = MyCloudinary.cloudinary;
 
-    @SneakyThrows
     @Override
     public void create(Task task, int userId) {
-        Map uploadResult1 = cloudinary.uploader().upload(task.getImg1(), ObjectUtils.emptyMap());
-        task.setImg1((String) uploadResult1.get("url"));
-        task.setCloudinaryId1((String) uploadResult1.get("public_id"));
-        Map uploadResult2 = cloudinary.uploader().upload(task.getImg2(), ObjectUtils.emptyMap());
-        task.setImg2((String) uploadResult2.get("url"));
-        task.setCloudinaryId2((String) uploadResult2.get("public_id"));
-        Map uploadResult3 = cloudinary.uploader().upload(task.getImg3(), ObjectUtils.emptyMap());
-        task.setImg3((String) uploadResult3.get("url"));
-        task.setCloudinaryId3((String) uploadResult3.get("public_id"));
+        try {
+            Map uploadResult1 = cloudinary.uploader().upload(task.getImg1(), ObjectUtils.emptyMap());
+            task.setImg1((String) uploadResult1.get("url"));
+            task.setCloudinaryId1((String) uploadResult1.get("public_id"));
+            Map uploadResult2 = cloudinary.uploader().upload(task.getImg2(), ObjectUtils.emptyMap());
+            task.setImg2((String) uploadResult2.get("url"));
+            task.setCloudinaryId2((String) uploadResult2.get("public_id"));
+            Map uploadResult3 = cloudinary.uploader().upload(task.getImg3(), ObjectUtils.emptyMap());
+            task.setImg3((String) uploadResult3.get("url"));
+            task.setCloudinaryId3((String) uploadResult3.get("public_id"));
+        } catch (IOException | RuntimeException e) {
+            e.printStackTrace();
+        }
         task.setUserId(userId);
         task.setDecide(1);
         task.setTaskCondition(Processor.process(task.getTaskCondition()));
         taskRepository.save(task);
+    }
+
+    @Override
+    public List<TaskDTO> readAllDTO() {
+        List<Task> tasks = readAll();
+        List<TaskDTO> taskDTOS = new ArrayList<>();
+        for (Task task: sortByDate(tasks)) {
+            taskDTOS.add(TaskMapper.INSTANCE.taskToTaskDTO(task));
+        }
+        return taskDTOS;
     }
 
     @Override
@@ -57,52 +77,61 @@ public class TaskServiceImpl implements TaskService{
         return taskRepository.getById(id);
     }
 
-    @SneakyThrows
     @Override
     public boolean update(Task task, int id) {
         if (taskRepository.existsById(id)) {
             Task oldTask = read(id);
-            if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
-                cloudinary.uploader().destroy(oldTask.getCloudinaryId1(), ObjectUtils.emptyMap());
-                Map uploadResult1 = cloudinary.uploader().upload(task.getImg1(), ObjectUtils.emptyMap());
-                task.setImg1((String) uploadResult1.get("url"));
-                task.setCloudinaryId1((String) uploadResult1.get("public_id"));
+            try {
+                if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
+
+                        cloudinary.uploader().destroy(oldTask.getCloudinaryId1(), ObjectUtils.emptyMap());
+
+                    Map uploadResult1 = cloudinary.uploader().upload(task.getImg1(), ObjectUtils.emptyMap());
+                    task.setImg1((String) uploadResult1.get("url"));
+                    task.setCloudinaryId1((String) uploadResult1.get("public_id"));
+                }
+                else
+                    task.setCloudinaryId1(oldTask.getCloudinaryId1());
+                if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
+                    cloudinary.uploader().destroy(oldTask.getCloudinaryId2(), ObjectUtils.emptyMap());
+                    Map uploadResult2 = cloudinary.uploader().upload(task.getImg2(), ObjectUtils.emptyMap());
+                    task.setImg2((String) uploadResult2.get("url"));
+                    task.setCloudinaryId2((String) uploadResult2.get("public_id"));
+                }
+                else
+                    task.setCloudinaryId2(oldTask.getCloudinaryId2());
+                if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
+                    cloudinary.uploader().destroy(oldTask.getCloudinaryId3(), ObjectUtils.emptyMap());
+                    Map uploadResult3 = cloudinary.uploader().upload(task.getImg3(), ObjectUtils.emptyMap());
+                    task.setImg3((String) uploadResult3.get("url"));
+                    task.setCloudinaryId3((String) uploadResult3.get("public_id"));
+                }
+                else
+                    task.setCloudinaryId3(oldTask.getCloudinaryId3());
+                task.setId(id);
+                task.setDecide(oldTask.getDecide());
+                task.setTaskCondition(Processor.process(task.getTaskCondition()));
+                taskRepository.save(task);
+                return true;
             }
-            else
-                task.setCloudinaryId1(oldTask.getCloudinaryId1());
-            if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
-                cloudinary.uploader().destroy(oldTask.getCloudinaryId2(), ObjectUtils.emptyMap());
-                Map uploadResult2 = cloudinary.uploader().upload(task.getImg2(), ObjectUtils.emptyMap());
-                task.setImg2((String) uploadResult2.get("url"));
-                task.setCloudinaryId2((String) uploadResult2.get("public_id"));
+            catch (IOException e) {
+                e.printStackTrace();
             }
-            else
-                task.setCloudinaryId2(oldTask.getCloudinaryId2());
-            if (!task.getImg1().startsWith("http://res.cloudinary.com/dxsv5iq47/image/upload/")){
-                cloudinary.uploader().destroy(oldTask.getCloudinaryId3(), ObjectUtils.emptyMap());
-                Map uploadResult3 = cloudinary.uploader().upload(task.getImg3(), ObjectUtils.emptyMap());
-                task.setImg3((String) uploadResult3.get("url"));
-                task.setCloudinaryId3((String) uploadResult3.get("public_id"));
-            }
-            else
-                task.setCloudinaryId3(oldTask.getCloudinaryId3());
-            task.setId(id);
-            task.setDecide(oldTask.getDecide());
-            task.setTaskCondition(Processor.process(task.getTaskCondition()));
-            taskRepository.save(task);
-            return true;
         }
         return false;
     }
 
-    @SneakyThrows
     @Override
     public boolean delete(int id) {
         if (taskRepository.existsById(id)) {
             Task task = read(id);
-            cloudinary.uploader().destroy(task.getCloudinaryId1(), ObjectUtils.emptyMap());
-            cloudinary.uploader().destroy(task.getCloudinaryId2(), ObjectUtils.emptyMap());
-            cloudinary.uploader().destroy(task.getCloudinaryId3(), ObjectUtils.emptyMap());
+            try {
+                cloudinary.uploader().destroy(task.getCloudinaryId1(), ObjectUtils.emptyMap());
+                cloudinary.uploader().destroy(task.getCloudinaryId2(), ObjectUtils.emptyMap());
+                cloudinary.uploader().destroy(task.getCloudinaryId3(), ObjectUtils.emptyMap());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             taskRepository.deleteById(id);
             return true;
         }
@@ -192,5 +221,33 @@ public class TaskServiceImpl implements TaskService{
             if (task.getTag1().equals(tag) || task.getTag2().equals(tag) || task.getTag3().equals(tag))
                 result.add(task);
         return sortByDate(result);
+    }
+
+    @Override
+    public List<Task> setCurrentEstimations(int currentUserId, List<Task> tasks) {
+        for (Task task: tasks) {
+            for (Estimation estimation: estimationService.readAll()) {
+                if (estimation.getUserId() == currentUserId && estimation.getTaskId() == task.getId()){
+                    task.setUserEstimation(estimation.getEstimation());
+                    update(task, task.getId());
+                    break;
+                }
+                else {
+                    update(task, task.getId());
+                    task.setUserEstimation(0);
+                }
+            }
+        }
+        return tasks;
+    }
+
+    @Override
+    public List<Task> setAVGEstimations() {
+        List<Task> tasks = readAll();
+        for (Task task: tasks) {
+            task.setEstimationAVG(estimationService.getEstimationAVGForTask(task.getId()));
+            update(task, task.getId());
+        }
+        return tasks;
     }
 }

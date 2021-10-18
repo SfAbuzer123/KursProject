@@ -1,6 +1,8 @@
 package com.spring.social.springSocial.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -72,4 +74,10 @@ public class Task {
 
     @Column(name = "cloudinary_id3")
     private String cloudinaryId3;
+
+    @Column(name = "estimation_AVG")
+    private int estimationAVG;
+
+    @Column(name = "user_estimation")
+    private int userEstimation;
 }

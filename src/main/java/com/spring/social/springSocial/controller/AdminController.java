@@ -2,9 +2,9 @@ package com.spring.social.springSocial.controller;
 
 import com.spring.social.springSocial.model.Task;
 import com.spring.social.springSocial.parser.Parser;
-import com.spring.social.springSocial.service.TaskService;
-import com.spring.social.springSocial.service.TopicService;
-import com.spring.social.springSocial.service.UserInfoService;
+import com.spring.social.springSocial.service.services.TaskService;
+import com.spring.social.springSocial.service.services.TopicService;
+import com.spring.social.springSocial.service.services.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,14 +50,24 @@ public class AdminController {
 
     @RequestMapping("/createTaskByAdmin/")
     public String createTaskByAdmin(@ModelAttribute Task task){
-        taskService.create(task, currentUserId);
+        try {
+            taskService.create(task, currentUserId);
+        }
+        catch (Exception e){
+            return "view/error";
+        }
         return "redirect:/userAdminProfile/"+currentUserId;
     }
 
     @RequestMapping("/updateTaskByAdmin/{taskId}")
     public String updateTaskByAdmin(@PathVariable String taskId, @ModelAttribute Task task){
-        task.setUserId(currentUserId);
-        taskService.update(task, Integer.parseInt(taskId));
+        try {
+            task.setUserId(currentUserId);
+            taskService.update(task, Integer.parseInt(taskId));
+        }
+        catch (Exception e){
+            return "view/error";
+        }
         return "redirect:/userAdminProfile/"+currentUserId;
     }
 }
