@@ -1,6 +1,7 @@
 package com.spring.social.springSocial.model;
 
 import lombok.Data;
+import org.hibernate.annotations.GeneratorType;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 
@@ -13,7 +14,15 @@ import javax.persistence.*;
 public class Task {
     @Id
     @Column(name = "id")
-    @GeneratedValue()
+    @SequenceGenerator(
+            name = "task_sequence",
+            sequenceName = "task_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "task_sequence"
+    )
     private int id;
 
     @Column(name = "user_id")

@@ -1,7 +1,6 @@
 package com.spring.social.springSocial.service.services;
 
 import org.springframework.social.facebook.api.User;
-import org.springframework.stereotype.Service;
 
 public interface FacebookService {
     String facebookLogin();

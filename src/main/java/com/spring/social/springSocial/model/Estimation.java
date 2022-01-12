@@ -10,7 +10,15 @@ import javax.persistence.*;
 public class Estimation {
     @Id
     @Column(name = "id")
-    @GeneratedValue()
+    @SequenceGenerator(
+            name = "estimation_sequence",
+            sequenceName = "estimation_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "estimation_sequence"
+    )
     private int id;
     @Column(name = "user_id")
     private int userId;

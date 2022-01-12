@@ -16,16 +16,19 @@ import java.util.List;
 
 @Controller
 public class AdminController {
-    @Autowired
-    private UserInfoService userInfoService;
+    private final UserInfoService userInfoService;
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
 
-    @Autowired
-    private TopicService topicService;
+    private final TopicService topicService;
 
     private int currentUserId;
+
+    public AdminController(UserInfoService userInfoService, TaskService taskService, TopicService topicService) {
+        this.userInfoService = userInfoService;
+        this.taskService = taskService;
+        this.topicService = topicService;
+    }
 
     @RequestMapping("admin")
     public String admin(Model model){

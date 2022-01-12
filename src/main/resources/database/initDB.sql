@@ -1,13 +1,21 @@
-CREATE TABLE IF NOT EXISTS users
+-- CREATE SEQUENCE user_sequence START WITH 1 INCREMENT BY 1;
+-- CREATE SEQUENCE task_sequence START WITH 1 INCREMENT BY 1;
+-- CREATE SEQUENCE user_answer_sequence START WITH 1 INCREMENT BY 1;
+-- CREATE SEQUENCE estimation_sequence START WITH 1 INCREMENT BY 1;
+CREATE TABLE IF NOT EXISTS user_info
 (
     id    INTEGER PRIMARY KEY ,
     email    varchar(50) not null unique ,
     name  VARCHAR(50) NOT NULL
 );
--- CREATE SEQUENCE hibernate_sequence START WITH 1 INCREMENT BY 1;
+
+create table if not exists topics(
+    id integer primary key ,
+    topic varchar(50) not null
+);
 create table if not exists tasks(
     id INTEGER PRIMARY KEY,
-    user_id INTEGER references users(id),
+    user_id integer references user_info(id),
     title varchar(50) not null,
     task_condition varchar(400) not null ,
     topic varchar(50) not null ,
@@ -27,33 +35,29 @@ create table if not exists tasks(
     estimation_AVG int ,
     user_estimation int
 );
--- CREATE SEQUENCE hibernate_sequence_tasks START WITH 1 INCREMENT BY 1;
-create table if not exists topics(
-    id integer primary key ,
-    topic varchar(50) not null
-);
 
 create table if not exists users_answers(
     id integer primary key ,
-    user_id integer,
-    task_id integer,
+    user_id integer references user_info(id),
+    task_id integer references tasks(id),
     decided integer
 );
+
 create table if not exists estimations(
     id integer primary key ,
-    user_id integer not null ,
-    task_id integer not null ,
+    user_id integer not null references user_info(id),
+    task_id integer not null references tasks(id),
     estimation int not null
 );
--- CREATE SEQUENCE hibernate_sequence_answers START WITH 1 INCREMENT BY 1;
 
--- DROP SEQUENCE IF EXISTS hibernate_sequence;
+
+-- DROP SEQUENCE IF EXISTS user_sequence;
+-- DROP SEQUENCE IF EXISTS task_sequence;
+-- DROP SEQUENCE IF EXISTS user_answer_sequence;
+-- DROP SEQUENCE IF EXISTS estimation_sequence;
 --
 -- drop table if exists topics;
+-- drop table if exists estimations;
 -- drop table if exists users_answers;
 -- drop table if exists tasks;
--- drop table if exists users;
--- drop table if exists estimations;
-
-
-
+-- drop table if exists user_info;

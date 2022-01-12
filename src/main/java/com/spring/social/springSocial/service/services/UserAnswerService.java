@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface UserAnswerService {
     void create(UserAnswer userAnswer);
+
     List<UserAnswer> readAll();
+
     UserAnswer read(int id);
+
     boolean update(UserAnswer userAnswer, int id);
+
     boolean delete(int id);
 }

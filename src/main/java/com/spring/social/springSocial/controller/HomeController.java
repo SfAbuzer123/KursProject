@@ -26,13 +26,6 @@ public class HomeController {
         return "view/home";
     }
 
-    @RequestMapping("/search/{text}")
-    public String search(@PathVariable String text, Model model){
-        model.addAttribute("allTasks", taskService.search(text));
-        taskService.search(text).stream().peek(System.out::println);
-        return "view/home";
-    }
-
     @RequestMapping(value = "/{tag}")
     public String searchByTag(@PathVariable String tag, Model model){
         model.addAttribute("tasks", taskService.getTasksByTag(tag));

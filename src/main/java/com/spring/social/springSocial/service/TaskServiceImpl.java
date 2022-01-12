@@ -34,7 +34,7 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private EstimationService estimationService;
 
-    private Cloudinary cloudinary = MyCloudinary.cloudinary;
+    private final Cloudinary cloudinary = MyCloudinary.cloudinary;
 
     @Override
     public void create(Task task, int userId) {

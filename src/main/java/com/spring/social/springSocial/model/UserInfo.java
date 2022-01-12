@@ -7,11 +7,19 @@ import java.util.Objects;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "user_info")
 public class UserInfo {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private int id;
     @Column(name = "email")
     private String email;
