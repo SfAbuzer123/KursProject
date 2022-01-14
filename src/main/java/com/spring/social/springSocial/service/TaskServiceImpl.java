@@ -15,6 +15,8 @@ import com.spring.social.springSocial.search.TaskSearch;
 import com.spring.social.springSocial.service.services.EstimationService;
 import com.spring.social.springSocial.service.services.TaskService;
 import com.spring.social.springSocial.service.services.UserAnswerService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +24,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+@AllArgsConstructor
 @Service
 public class TaskServiceImpl implements TaskService {
-    @Autowired
+
     private TaskRepository taskRepository;
-
-    @Autowired
     private UserAnswerService answerService;
-
-    @Autowired
     private EstimationService estimationService;
 
     private final Cloudinary cloudinary = MyCloudinary.cloudinary;
@@ -132,6 +130,7 @@ public class TaskServiceImpl implements TaskService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            answerService.deleteAnswersByTaskId(id);
             taskRepository.deleteById(id);
             return true;
         }

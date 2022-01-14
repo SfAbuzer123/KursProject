@@ -46,4 +46,13 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         }
         return false;
     }
+
+    @Override
+    public void deleteAnswersByTaskId(int taskId){
+        List<UserAnswer> answers = readAll();
+        for (UserAnswer answer : answers) {
+            if (answer.getTaskId() == taskId)
+                delete(answer.getId());
+        }
+    }
 }

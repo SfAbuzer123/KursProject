@@ -14,4 +14,6 @@ public interface UserAnswerService {
     boolean update(UserAnswer userAnswer, int id);
 
     boolean delete(int id);
+
+    public void deleteAnswersByTaskId(int taskId);
 }

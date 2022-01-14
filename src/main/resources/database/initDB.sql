@@ -36,7 +36,7 @@ create table if not exists tasks(
     user_estimation int
 );
 
-create table if not exists users_answers(
+create table if not exists user_answer(
     id integer primary key ,
     user_id integer references user_info(id),
     task_id integer references tasks(id),
@@ -58,6 +58,6 @@ create table if not exists estimations(
 --
 -- drop table if exists topics;
 -- drop table if exists estimations;
--- drop table if exists users_answers;
+-- drop table if exists user_answer;
 -- drop table if exists tasks;
 -- drop table if exists user_info;
